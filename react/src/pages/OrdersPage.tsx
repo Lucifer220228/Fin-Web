@@ -12,8 +12,13 @@ const OrdersPage: React.FC = () => {
   }, []);
 
   const fetchOrders = async () => {
-    const data = await getOrders();
-    setOrders(data);
+    try {
+      const data = await getOrders();
+      console.log('Orders:', data); // 確認是否有返回數據
+      setOrders(data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
   };
 
   const handleCreateOrUpdateOrder = async (order: any) => {
