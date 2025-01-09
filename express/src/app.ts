@@ -1,9 +1,10 @@
 import express from 'express'
-import {router} from "./server"
+import orderRoutes from './routes/orderRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 import { logger } from './middlewares/log';
 const http = require('http');
 import cors from 'cors';
-import { MongoDB } from './utils/MongoDB';
+import { MongoDB } from './config/MongoDB';
 require('dotenv').config()
 const app: express.Application = express()
 const server = http.createServer(app);
@@ -25,14 +26,15 @@ app.use(cors({
   "exposedHeaders": ['Content-Disposition']
 }))
 
+app.use('/api/orders', orderRoutes);
 app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: false }))
 app.use('/assets', express.static(process.env.assetsPath as string));
-
-for (const route of router) {
-  app.use(route.getRouter())
-}
+app.use(errorHandler);
 
 server.listen(process.env.PORT, () => {
   logger.info('listening on *:'+process.env.PORT);
 });
+
+
+export default app;
