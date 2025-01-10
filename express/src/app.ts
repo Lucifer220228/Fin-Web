@@ -26,7 +26,18 @@ app.use(cors({
   "exposedHeaders": ['Content-Disposition']
 }))
 
+console.log('正在加載 /api/orders 路由');
 app.use('/api/orders', orderRoutes);
+app.use((req, res, next) => {
+  console.log(`收到請求：${req.method} ${req.url}`);
+  next();
+});
+
+app.use((req, res) => {
+  console.log(`未匹配路由：${req.method} ${req.url}`);
+  res.status(404).json({ message: '路由未找到' });
+});
+
 app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: false }))
 app.use('/assets', express.static(process.env.assetsPath as string));

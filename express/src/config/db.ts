@@ -7,7 +7,8 @@ const dbName = "410630452";
 const collectionName = "orderlist";
 
 
-async function main() {
+
+const connectDB = async () => {
     const client = new MongoClient(uri);
 
     try {
@@ -20,4 +21,4 @@ async function main() {
         console.error("發生錯誤：", error);
     }
 }
-main();
+export default connectDB;
